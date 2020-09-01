@@ -2,13 +2,17 @@ import { useQuery } from "react-query";
 
 const fetchData = async (key, params) => {
   const req = await fetch(
-    `https://data.cdc.gov/resource/vbim-akqf.json?${params.join("&")}`
+    `https://data.cdc.gov/resource/vbim-akqf.json?$limit=40000000&${params.join(
+      "&"
+    )}`
   );
   return await req.json();
 };
 
 const useDataSource = (filter) => {
-  return useQuery(["vbim-akqf.json", filter.getParams()], fetchData);
+  return useQuery(["vbim-akqf.json", filter.getParams()], fetchData, {
+    staleTime: 10000,
+  });
 };
 
 const createOperation = (operator, clause) => (value) => {
