@@ -32,26 +32,22 @@ const dataSource = createDataSource({
       "White, Non-Hispanic",
       "Multiple/Other, Non-Hispanic",
     ],
-    currentStatus: fieldTypes.text({
-      fieldName: "current_status",
-      allowedValues: ["Laboratory-confirmed case", "Probable Case"],
-    }),
-    hospitalized: fieldTypes.text({
-      fieldName: "hosp_yn",
-      allowedValues: ["Yes", "No", "Missing", "Unknown"],
-    }),
-    icu: fieldTypes.text({
-      fieldName: "icu_yn",
-      allowedValues: ["Yes", "No", "Missing", "Unknown"],
-    }),
-    death: fieldTypes.text({
-      fieldName: "death_yn",
-      allowedValues: ["Yes", "No", "Missing", "Unknown"],
-    }),
-    additionalConditions: fieldTypes.text({
-      fieldName: "medcond_yn",
-      allowedValues: ["Yes", "No", "Missing", "Unknown"],
-    }),
+  }),
+  hospitalized: fieldTypes.text({
+    fieldName: "hosp_yn",
+    allowedValues: ["Yes", "No", "Missing", "Unknown"],
+  }),
+  icu: fieldTypes.text({
+    fieldName: "icu_yn",
+    allowedValues: ["Yes", "No", "Missing", "Unknown"],
+  }),
+  death: fieldTypes.text({
+    fieldName: "death_yn",
+    allowedValues: ["Yes", "No", "Missing", "Unknown"],
+  }),
+  additionalConditions: fieldTypes.text({
+    fieldName: "medcond_yn",
+    allowedValues: ["Yes", "No", "Missing", "Unknown"],
   }),
 });
 
