@@ -16,7 +16,7 @@ const App = () => {
     )
   );
 
-  const chartData = useAreaChart(data, "cdc_report_dt", "age_group");
+  const chartData = useAreaChart(data, "reportDate", "age");
   console.log(chartData);
 
   if (!isLoading && chartData) {

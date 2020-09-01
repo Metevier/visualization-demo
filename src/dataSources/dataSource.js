@@ -19,6 +19,7 @@ const createDataSource = (fields) => {
     acc[field] = {
       ...fields[field],
       fieldName: fields[field].fieldName ?? field,
+      name: field,
     };
     return acc;
   }, {});

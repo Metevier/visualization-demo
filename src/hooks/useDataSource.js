@@ -71,18 +71,32 @@ const selectGroup = function (fields) {
   const selectedFields = [];
   const separator = ",";
 
+  const buildQuery = () => {
+    const queryFields =
+      selectedFields.length === 0
+        ? Object.values(fields).map(
+            (field) => `${field.fieldName} AS ${field.name}`
+          )
+        : selectedFields;
+
+    return queryFields.join(separator);
+  };
+
   return {
     build() {
-      const query = selectedFields.join(separator);
-      return selectedFields.length > 0 ? `$SELECT=${query}` : "";
+      const query = buildQuery();
+      return `$SELECT=${query}`;
     },
     actions: {
       select(...selectors) {
-        const currentFields = selectors.map((selector) =>
-          typeof selector === "function"
-            ? selector(fields)?.fieldName
-            : fields[selector]?.fieldName
-        );
+        const currentFields = selectors.map((selector) => {
+          const field =
+            typeof selector === "function"
+              ? selector(fields)
+              : fields[selector];
+
+          return `${field?.fieldName} AS ${field?.name}`;
+        });
 
         selectedFields.push(...currentFields);
 
