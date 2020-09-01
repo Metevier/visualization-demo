@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 
 const fetchData = async (key, params) => {
   const req = await fetch(
-    `https://data.cdc.gov/resource/vbim-akqf.json?$limit=400000&${params.join(
+    `https://data.cdc.gov/resource/vbim-akqf.json?$limit=4000000&${params.join(
       "&"
     )}`
   );
@@ -16,7 +16,7 @@ const useDataSource = (filter) => {
 };
 
 const createOperation = (operator, clause) => (value) => {
-  clause.set(value, operator);
+  clause.set((fieldName) => `${fieldName}${operator}'${value}'`);
   return clause.clauses();
 };
 
@@ -24,17 +24,23 @@ const operators = (clause) => {
   return {
     equals: createOperation("=", clause),
     notEquals: createOperation("!=", clause),
+    between: (before, after) => {
+      clause.set(
+        (fieldName) => `${fieldName} BETWEEN '${before}' AND '${after}'`
+      );
+      return clause.clauses();
+    },
   };
 };
 
 const whereGroup = function (fields) {
-  const clauseBuilders = [];
+  const clauses = [];
   const separator = " AND ";
 
   return {
     build() {
-      const query = clauseBuilders.map((x) => x()).join(separator);
-      return clauseBuilders.length > 0 ? `$WHERE=(${query})` : "";
+      const query = clauses.join(separator);
+      return clauses.length > 0 ? `$WHERE=(${query})` : "";
     },
     actions: {
       where(selector) {
@@ -42,24 +48,16 @@ const whereGroup = function (fields) {
           typeof selector === "function"
             ? selector(fields)?.fieldName
             : fields[selector]?.fieldName;
-        let value = null;
-        let operator = null;
 
         const self = this;
         const clause = {
           clauses() {
             return self;
           },
-          set(val, op) {
-            value = val;
-            operator = op;
+          set(clauseBuilder) {
+            clauses.push(clauseBuilder(field));
           },
         };
-
-        const build = () => {
-          return `${field}${operator}'${value}'`;
-        };
-        clauseBuilders.push(build);
 
         return operators(clause);
       },

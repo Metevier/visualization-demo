@@ -10,10 +10,13 @@ const App = () => {
   const [areaField, setAreaField] = useState(dataSource.sex.name);
   const { isLoading, data } = useDataSource(
     withFilter(dataSource, (builder) =>
-      builder.select(
-        (fields) => fields.reportDate,
-        (fields) => fields[areaField]
-      )
+      builder
+        .select(
+          (fields) => fields.reportDate,
+          (fields) => fields[areaField]
+        )
+        .where((fields) => fields.reportDate)
+        .between("2020-08-01", "2020-09-01")
     )
   );
 
