@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack } from "@chakra-ui/core";
+import { Box, SimpleGrid, Heading } from "@chakra-ui/core";
 import { Group } from "@vx/group";
 import { GridRows, GridColumns } from "@vx/grid";
 import { curveNatural } from "@vx/curve";
@@ -9,6 +9,8 @@ import { GradientOrangeRed } from "@vx/gradient";
 import { useTooltip, TooltipWithBounds } from "@vx/tooltip";
 import { localPoint } from "@vx/event";
 import { bisector } from "d3-array";
+
+import "./Chart.css";
 
 const date = (d) => new Date(d).valueOf();
 const defaultMargin = { top: 40, right: 30, bottom: 50, left: 60 };
@@ -46,6 +48,9 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
   const valueScale = chartData.valueScale.range([yMax, 0]);
 
   const bisectDate = bisector((d) => new Date(d.date)).left;
+  const getKeyColor = (key) =>
+    areaColors[chartData.areaFieldValues.indexOf(key)] ||
+    "url(#stacked-area-orangered)";
 
   return (
     <div style={{ position: "relative" }}>
@@ -85,10 +90,7 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
                   key={`stack-${stack.key}`}
                   d={path(stack) || ""}
                   stroke="#222"
-                  fill={
-                    areaColors[chartData.areaFieldValues.indexOf(stack.key)] ||
-                    "url(#stacked-area-orangered)"
-                  }
+                  fill={getKeyColor(stack.key)}
                   strokeWidth={1}
                   strokeOpacity={0.8}
                   strokeDasharray="3,2"
@@ -120,18 +122,29 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
           top={tooltipTop}
           left={tooltipLeft}
         >
-          <strong>{tooltipData.date.split("T")[0]}</strong>
-          <VStack>
+          <Heading size="sm" mb={1} textAlign="center">
+            {tooltipData.date.split("T")[0]}
+          </Heading>
+          <SimpleGrid columns={2} spacing={2}>
             {chartData.areaFieldValues.map((value) =>
               tooltipData[value] !== undefined ? (
-                <span>
-                  {value}: {tooltipData[value]}
-                </span>
+                <>
+                  <Box>
+                    <span
+                      className="key-square"
+                      style={{ backgroundColor: getKeyColor(value) }}
+                    />
+                    {value}
+                  </Box>
+                  <Box>
+                    <strong>{tooltipData[value]}</strong>
+                  </Box>
+                </>
               ) : (
                 ""
               )
             )}
-          </VStack>
+          </SimpleGrid>
         </TooltipWithBounds>
       )}
     </div>

@@ -19,6 +19,7 @@ const dataSource = createDataSource({
       "60 - 69 Years",
       "70 - 79 Years",
       "80+ Years",
+      "Unknown",
     ],
   }),
   raceAndEthnicity: fieldTypes.text({
