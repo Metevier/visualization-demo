@@ -1,15 +1,28 @@
 import React from "react";
+import { VStack } from "@chakra-ui/core";
 import { Group } from "@vx/group";
 import { GridRows, GridColumns } from "@vx/grid";
 import { curveNatural } from "@vx/curve";
 import { AreaStack } from "@vx/shape";
 import { AxisLeft, AxisBottom } from "@vx/axis";
 import { GradientOrangeRed } from "@vx/gradient";
+import { useTooltip, TooltipWithBounds } from "@vx/tooltip";
+import { localPoint } from "@vx/event";
+import { bisector } from "d3-array";
 
 const date = (d) => new Date(d).valueOf();
 const defaultMargin = { top: 40, right: 30, bottom: 50, left: 60 };
 
 const Chart = ({ chartData, margin = defaultMargin }) => {
+  const {
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    tooltipOpen,
+    showTooltip,
+    hideTooltip,
+  } = useTooltip();
+
   if (chartData === null) return <div>Please specify chartData</div>;
 
   const width = 1200;
@@ -21,8 +34,10 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
   const timeScale = chartData.timeScale.range([0, xMax]);
   const valueScale = chartData.valueScale.range([yMax, 0]);
 
+  const bisectDate = bisector((d) => new Date(d.date)).left;
+
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <svg width={width} height={height}>
         <GradientOrangeRed id="stacked-area-orangered" />
         <rect x={0} y={0} width={width} height={height} fill="rgba(0,0,0,0)" />
@@ -52,14 +67,59 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
             x={(d) => timeScale(date(d.data.date))}
             y0={(d) => valueScale(isNaN(d[0]) ? 0 : d[0])}
             y1={(d) => valueScale(isNaN(d[1]) ? d[0] : d[1])}
-            stroke="#222"
-            fill="url(#stacked-area-orangered)"
-            strokeWidth={1.5}
-            strokeOpacity={0.8}
-            strokeDasharray="1,2"
-          />
+          >
+            {({ stacks, path }) =>
+              stacks.map((stack) => (
+                <path
+                  key={`stack-${stack.key}`}
+                  d={path(stack) || ""}
+                  stroke="#222"
+                  fill="url(#stacked-area-orangered)"
+                  strokeWidth={1.5}
+                  strokeOpacity={0.8}
+                  strokeDasharray="1,2"
+                  onMouseMove={(event) => {
+                    const coords = localPoint(
+                      event.target.ownerSVGElement,
+                      event
+                    );
+                    // Adds a bit of padding so the end date isnt exactly on the edge
+                    const x = timeScale.invert(coords.x - margin.left + 5);
+                    const index = bisectDate(chartData.data, x, 1);
+                    showTooltip({
+                      tooltipLeft: coords.x,
+                      tooltipTop: coords.y,
+                      tooltipData: chartData.data[index - 1],
+                    });
+                  }}
+                  onMouseOut={hideTooltip}
+                />
+              ))
+            }
+          </AreaStack>
         </Group>
       </svg>
+      {tooltipOpen && (
+        <TooltipWithBounds
+          // set this to random so it correctly updates with parent bounds
+          key={Math.random()}
+          top={tooltipTop}
+          left={tooltipLeft}
+        >
+          <strong>{tooltipData.date.split("T")[0]}</strong>
+          <VStack>
+            {chartData.areaFieldValues.map((value) =>
+              tooltipData[value] !== undefined ? (
+                <span>
+                  {value}: {tooltipData[value]}
+                </span>
+              ) : (
+                ""
+              )
+            )}
+          </VStack>
+        </TooltipWithBounds>
+      )}
     </div>
   );
 };
