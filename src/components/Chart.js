@@ -26,7 +26,7 @@ const areaColors = [
   "#FAF089",
 ];
 
-const Chart = ({ chartData, margin = defaultMargin }) => {
+const Chart = ({ chartData, width, height, margin = defaultMargin }) => {
   const {
     tooltipData,
     tooltipLeft,
@@ -37,9 +37,6 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
   } = useTooltip();
 
   if (chartData === null) return <div>Please specify chartData</div>;
-
-  const width = 1200;
-  const height = 800;
 
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
@@ -128,7 +125,7 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
           <SimpleGrid columns={2} spacing={2}>
             {chartData.areaFieldValues.map((value) =>
               tooltipData[value] !== undefined ? (
-                <>
+                <React.Fragment key={value}>
                   <Box>
                     <span
                       className="key-square"
@@ -139,7 +136,7 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
                   <Box>
                     <strong>{tooltipData[value]}</strong>
                   </Box>
-                </>
+                </React.Fragment>
               ) : (
                 ""
               )
