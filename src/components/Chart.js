@@ -12,6 +12,17 @@ import { bisector } from "d3-array";
 
 const date = (d) => new Date(d).valueOf();
 const defaultMargin = { top: 40, right: 30, bottom: 50, left: 60 };
+const areaColors = [
+  "#FC8181",
+  "#F6AD55",
+  "#48BB78",
+  "#4FD1C5",
+  "#63B3ED",
+  "#76E4F7",
+  "#B794F4",
+  "#F687B3",
+  "#FAF089",
+];
 
 const Chart = ({ chartData, margin = defaultMargin }) => {
   const {
@@ -74,10 +85,13 @@ const Chart = ({ chartData, margin = defaultMargin }) => {
                   key={`stack-${stack.key}`}
                   d={path(stack) || ""}
                   stroke="#222"
-                  fill="url(#stacked-area-orangered)"
-                  strokeWidth={1.5}
+                  fill={
+                    areaColors[chartData.areaFieldValues.indexOf(stack.key)] ||
+                    "url(#stacked-area-orangered)"
+                  }
+                  strokeWidth={1}
                   strokeOpacity={0.8}
-                  strokeDasharray="1,2"
+                  strokeDasharray="3,2"
                   onMouseMove={(event) => {
                     const coords = localPoint(
                       event.target.ownerSVGElement,
