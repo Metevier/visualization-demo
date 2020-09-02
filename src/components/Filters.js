@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Select, HStack, Button } from "@chakra-ui/core";
+import { Select, Flex, Button } from "@chakra-ui/core";
 
 const Filters = ({ fields, setFilter }) => {
   const [field, setField] = useState("");
@@ -11,11 +11,13 @@ const Filters = ({ fields, setFilter }) => {
   };
 
   return (
-    <HStack>
+    <Flex justifyContent="center" m={5}>
       <Select
         onChange={(e) => setField(e.target.value)}
         value={field}
         placeholder="Select field"
+        maxWidth="250px"
+        mx={3}
       >
         {fields.map((field) => (
           <option key={field.name} value={field.name}>
@@ -23,7 +25,12 @@ const Filters = ({ fields, setFilter }) => {
           </option>
         ))}
       </Select>
-      <Select onChange={(e) => setOperator(e.target.value)} value={operator}>
+      <Select
+        onChange={(e) => setOperator(e.target.value)}
+        value={operator}
+        maxWidth="250px"
+        mx={3}
+      >
         <option value="equals">Equals</option>
         <option value="notEquals">Not Equals</option>
       </Select>
@@ -31,6 +38,8 @@ const Filters = ({ fields, setFilter }) => {
         onChange={(e) => setValue(e.target.value)}
         values={value}
         placeholder={field === "" ? "Select a field first" : "Select a value"}
+        maxWidth="250px"
+        mx={3}
       >
         {field !== ""
           ? fields
@@ -42,8 +51,10 @@ const Filters = ({ fields, setFilter }) => {
               ))
           : ""}
       </Select>
-      <Button onClick={set}>Apply</Button>
-    </HStack>
+      <Button minWidth="150px" mx={3} onClick={set} colorScheme="green">
+        Apply
+      </Button>
+    </Flex>
   );
 };
 

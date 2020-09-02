@@ -40,10 +40,16 @@ const App = () => {
 
   return (
     <>
-      <Heading>Visualization Demo</Heading>
+      <Heading textAlign="center" my={5} size="lg">
+        COVID-19 Positive Tests, July - Visualization Demo
+      </Heading>
       <Filters fields={textFields} setFilter={setFilter} />
-      <FieldSelector fields={textFields} setField={setAreaField} />
-      <Center width="100vw" height="80vh">
+      <FieldSelector
+        fields={textFields}
+        setField={setAreaField}
+        selectedField={areaField}
+      />
+      <Center width="100vw" height="75vh">
         {!isLoading && chartData ? (
           <ParentSize>
             {({ width, height }) => (
