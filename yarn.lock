@@ -1238,7 +1238,7 @@
   dependencies:
     "@chakra-ui/utils" "1.0.0-rc.3"
 
-"@chakra-ui/core@^1.0.0-rc.2":
+"@chakra-ui/core@^1.0.0-rc.3":
   version "1.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/@chakra-ui/core/-/core-1.0.0-rc.3.tgz#6c66ff71e0d5f6bb1d09842d01a7d0ff21eaf422"
   integrity sha512-21ghOsEGfrL9FzKU7ZB5iLZNBBNoB8dAzQW4RN3SDQPsg2Q1QxFxHZ1WvNjmTO/1PM/ihnAdXZZfYUrTE4IjnA==

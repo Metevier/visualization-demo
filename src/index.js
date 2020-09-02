@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { ChakraProvider, CSSReset } from "@chakra-ui/core";
-import theme from "@chakra-ui/theme";
+import { ChakraProvider } from "@chakra-ui/core";
 
 import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <CSSReset />
+    <ChakraProvider resetCSS>
       <App />
     </ChakraProvider>
   </React.StrictMode>,

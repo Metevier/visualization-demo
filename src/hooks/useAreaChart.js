@@ -53,7 +53,6 @@ const useAreaChart = (data, dateField, areaField = null) => {
   );
 
   useEffect(() => {
-    console.log("Computing Chart");
     setChartData(computeChart(data, dateField, areaField));
   }, [data, dateField, areaField]);
 
