@@ -41,7 +41,7 @@ const App = () => {
   return (
     <>
       <Heading textAlign="center" my={5} size="lg">
-        COVID-19 Positive Tests, July - Visualization Demo
+        COVID-19 Positive Tests, July 2021 - Visualization Demo (50,000 Record Sample)
       </Heading>
       <Filters fields={textFields} setFilter={setFilter} />
       <FieldSelector
