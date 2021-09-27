@@ -21,7 +21,7 @@ const App = () => {
           (fields) => fields[areaField]
         )
         .where((fields) => fields.reportDate)
-        .between("2020-07-01", "2020-07-31");
+        .between("2021-07-01", "2021-07-31");
 
       if (filter) {
         const filterPredicate = builder.where(filter.field)[filter.operator];
