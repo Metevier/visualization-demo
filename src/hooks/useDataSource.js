@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 
 const fetchData = async (key, params) => {
   const req = await fetch(
-    `https://data.cdc.gov/resource/vbim-akqf.json?$limit=4000000&${params.join(
+    `https://data.cdc.gov/resource/vbim-akqf.json?$limit=400000&${params.join(
       "&"
     )}`
   );
